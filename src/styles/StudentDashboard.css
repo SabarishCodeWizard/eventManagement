@@ -153,3 +153,123 @@
 .footer-p{
   color: white;
 }
+
+.feedback-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.feedback-btn {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+/* Navbar Styles */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #007bff;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.menu-icon {
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+.icon {
+  font-size: 30px;
+  color: white;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px;  /* Hidden initially */
+  width: 250px;
+  height: 100vh;
+  background: #333;
+  padding-top: 60px;
+  transition: 0.3s ease;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 15px;
+  border-bottom: 1px solid #555;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.sidebar ul li:hover {
+  background: #555;
+}
+
+/* Back Button */
+.back-icon {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  cursor: pointer;
+  color: white;
+}
+
+.back-icon .icon {
+  font-size: 28px;
+}
+
+/* Content spacing so navbar doesn't overlap */
+.content {
+  margin-top: 70px;
+}
+
+/* Feedback Button */
+.feedback-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.feedback-btn {
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 10px;
+  }
+
+  .sidebar {
+    width: 200px;
+  }
+
+  .sidebar ul li {
+    padding: 12px;
+    font-size: 16px;
+  }
+}

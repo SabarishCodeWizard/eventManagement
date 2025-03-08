@@ -1,0 +1,46 @@
+.home-container {
+    text-align: center;
+    padding: 50px;
+    background-color: #f8f9fa;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    font-size: 28px;
+    color: #007bff;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    display: flex;
+    gap: 20px;
+}
+
+.btn {
+    text-decoration: none;
+    font-size: 18px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    color: white;
+    transition: 0.3s ease;
+}
+
+.admin-btn {
+    background-color: #dc3545;
+}
+
+.student-btn {
+    background-color: #28a745;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
