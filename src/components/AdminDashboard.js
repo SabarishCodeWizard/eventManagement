@@ -66,6 +66,7 @@ const AdminDashboard = () => {
       {/* Header Section */}
       <header className="admin-header">
         <h1>Admin Dashboard</h1>
+        <div className="event-count">Total Events: {events.length}</div>
       </header>
 
       {/* Main Content */}
