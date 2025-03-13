@@ -98,7 +98,7 @@ const StudentDashboard = () => {
             </div>
 
             <footer className="footer">
-                <p className="footer-p">&copy; Created by Shivani &#128519; & Iniyaa &#128522;</p>
+                <p className="footer-p">&copy; Created by Sabarish R &#128519; & NaveenKumar P &#128522;</p>
             </footer>
         </div>
     );
