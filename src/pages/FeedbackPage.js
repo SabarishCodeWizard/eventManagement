@@ -4,7 +4,6 @@ import { collection, addDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
 const FeedbackPage = () => {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -44,7 +43,7 @@ const FeedbackPage = () => {
                 setPhone("");
                 setRating("Good");
                 setFeedback("");
-                navigate("/student-dashboard");
+                navigate("/student-dashboard"); // Redirect to student dashboard
             } else {
                 alert("Error submitting feedback. Please try again.");
             }
@@ -55,15 +54,16 @@ const FeedbackPage = () => {
     };
 
     return (
-        <div className="feedback-container d-flex justify-content-center align-items-center min-vh-100">
-            <div className="card feedback-card shadow-lg p-4">
+        <div className="container d-flex justify-content-center align-items-center min-vh-100">
+            <div className="card shadow-lg p-4" style={{ maxWidth: "500px", width: "100%" }}>
                 <h3 className="text-center mb-4">Submit Your Feedback</h3>
                 <form onSubmit={handleSubmit}>
+                    {/* Email Field */}
                     <div className="mb-3">
                         <label className="form-label fw-bold">Email</label>
                         <input
                             type="email"
-                            className="form-control custom-input"
+                            className="form-control"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
@@ -71,11 +71,12 @@ const FeedbackPage = () => {
                         />
                     </div>
 
+                    {/* Phone Field */}
                     <div className="mb-3">
                         <label className="form-label fw-bold">Phone Number</label>
                         <input
                             type="tel"
-                            className="form-control custom-input"
+                            className="form-control"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             required
@@ -83,24 +84,21 @@ const FeedbackPage = () => {
                         />
                     </div>
 
+                    {/* Rating Selection */}
                     <div className="mb-3">
                         <label className="form-label fw-bold">Rate Us</label>
-                        <select
-                            className="form-select custom-select"
-                            value={rating}
-                            onChange={(e) => setRating(e.target.value)}
-                            required
-                        >
+                        <select className="form-select" value={rating} onChange={(e) => setRating(e.target.value)} required>
                             <option value="Excellent">Excellent</option>
                             <option value="Good">Good</option>
                             <option value="Poor">Poor</option>
                         </select>
                     </div>
 
+                    {/* Feedback Description */}
                     <div className="mb-3">
                         <label className="form-label fw-bold">Your Feedback</label>
                         <textarea
-                            className="form-control custom-textarea"
+                            className="form-control"
                             rows="4"
                             value={feedback}
                             onChange={(e) => setFeedback(e.target.value)}
@@ -109,6 +107,7 @@ const FeedbackPage = () => {
                         />
                     </div>
 
+                    {/* Submit Button */}
                     <button type="submit" className="btn btn-primary w-100">
                         Submit Feedback
                     </button>
