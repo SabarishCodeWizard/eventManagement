@@ -19,26 +19,40 @@
 
 /* Header */
 h2 {
-  color: #0056b3;
-  font-size: 24px;
-  margin-bottom: 12px;
+  color: #003366;
+  /* Darker blue for a professional look */
+  font-size: 26px;
+  /* Slightly larger font */
+  font-weight: 700;
+  /* Bold for emphasis */
+  margin-bottom: 16px;
+  /* Increased spacing */
 }
 
 p {
-  font-size: 15px;
-  margin-bottom: 20px;
-  color: #555;
+  font-size: 16px;
+  /* Slightly larger font */
+  margin-bottom: 24px;
+  /* Increased spacing */
+  color: #444;
+  /* Darker gray for better readability */
 }
 
 /* Error Message */
 .error-message {
-  background: #ff4d4d;
+  background: #d9534f;
+  /* Bootstrap danger color */
   color: white;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: bold;
+  padding: 14px;
+  /* Slightly larger padding */
+  border-radius: 8px;
+  /* More rounded corners */
+  margin-bottom: 16px;
+  /* Increased spacing */
+  font-size: 15px;
+  /* Slightly larger font */
+  font-weight: 600;
+  /* Semi-bold for readability */
   text-align: center;
 }
 
@@ -46,7 +60,8 @@ p {
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
+  /* Increased gap for better spacing */
 }
 
 .form-group {
@@ -54,62 +69,87 @@ p {
 }
 
 .form-group label {
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-weight: 700;
+  /* Bolder text for labels */
+  margin-bottom: 8px;
+  /* Increased spacing */
   display: block;
-  color: #333;
+  color: #222;
+  /* Darker text for better contrast */
 }
 
 .form-group input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 14px;
+  /* Slightly larger padding */
+  border: 1px solid #bbb;
+  /* Softer border color */
+  border-radius: 10px;
+  /* More rounded corners */
   font-size: 16px;
-  transition: border 0.3s ease-in-out;
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .form-group input:focus {
-  border: 1px solid #007bff;
+  border-color: #0056b3;
+  /* Consistent with theme */
+  box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+  /* Subtle glow effect */
   outline: none;
 }
 
 /* Login Button */
 .login-btn {
-  background: linear-gradient(135deg, #007bff, #0056b3);
+  background: linear-gradient(135deg, #0056b3, #003d82);
+  /* Refined gradient */
   color: white;
-  padding: 14px;
+  padding: 16px;
+  /* Slightly larger padding */
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  /* More rounded corners */
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 17px;
+  /* Slightly larger font */
+  font-weight: 700;
+  /* Bolder text */
   transition: all 0.3s ease-in-out;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  /* Slightly stronger shadow */
 }
 
 .login-btn:hover {
-  background: linear-gradient(135deg, #0056b3, #003d82);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #003d82, #00264d);
+  /* Darker hover effect */
+  transform: translateY(-3px);
+  /* Slightly more pronounced lift */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+  /* Enhanced shadow on hover */
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
   .login-card {
-    padding: 25px;
+    padding: 30px;
+    /* Slightly larger padding for better spacing */
   }
 
   h2 {
-    font-size: 22px;
+    font-size: 24px;
+    /* Adjusted for smaller screens */
   }
 
   .form-group input {
-    font-size: 14px;
-    padding: 10px;
+    font-size: 15px;
+    /* Adjusted for smaller screens */
+    padding: 12px;
+    /* Consistent with smaller input size */
   }
 
   .login-btn {
-    font-size: 14px;
-    padding: 12px;
+    font-size: 15px;
+    /* Adjusted for smaller screens */
+    padding: 14px;
+    /* Consistent with smaller button size */
   }
 }
