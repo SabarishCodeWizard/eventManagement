@@ -5,6 +5,8 @@
   align-items: center;
   width: 100%;
   height: 100vh;
+  background-color: #f8f9fa;
+  /* Light gray background */
 }
 
 .login-card {
@@ -125,6 +127,34 @@ p {
   /* Slightly more pronounced lift */
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
   /* Enhanced shadow on hover */
+}
+
+/* Google Sign-In Button */
+.google-signin-btn {
+  background-color: #db4437;
+  /* Google red */
+  color: white;
+  border: none;
+  padding: 14px;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.google-signin-btn i {
+  font-size: 18px;
+  /* Icon size */
+}
+
+.google-signin-btn:hover {
+  background-color: #c1351d;
+  /* Darker red on hover */
 }
 
 /* Responsive Design */
