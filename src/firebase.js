@@ -1,8 +1,10 @@
+// Import Firebase functions
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getStorage } from "firebase/storage"; // Import Storage
+import { getStorage } from "firebase/storage";
 
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBpdNsnBdInQv3mVsMvzr_PwDCOzRb3cw8",
     authDomain: "extension-e7604.firebaseapp.com",
@@ -13,12 +15,14 @@ const firebaseConfig = {
     measurementId: "G-K0982J26ZY"
 };
 
+// Initialize Firebase app and services
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app); // Initialize Storage
-const googleProvider = new GoogleAuthProvider();
+const storage = getStorage(app);
 
+// Google authentication provider and sign-in function
+const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
     try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -28,4 +32,5 @@ const signInWithGoogle = async () => {
     }
 };
 
+// Export Firebase objects and functions
 export { auth, db, storage, signInWithGoogle };
