@@ -13,7 +13,7 @@ Welcome to the College Event Management project.
 ## Installation
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/college-event-management.git
+   https://github.com/SabarishCodeWizard/eventManagement.git
     ```
 2. Navigate to the project folder:
     ```bash
