@@ -1,6 +1,6 @@
 # College Event Management
 
-Welcome to the College Event Management project. This system helps manage events at your campus efficiently.
+Welcome to the College Event Management project.
 
 **Live Demo:** Check out the live demo at [https://bitsathyevents.vercel.app/](https://bitsathyevents.vercel.app/)
 
