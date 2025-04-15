@@ -8,9 +8,9 @@
 
 .dashboard-container {
   width: 100%;
-    display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   text-align: center;
   background-color: #f8f8f8;
 }
@@ -34,11 +34,11 @@
   opacity: 0.9;
 }
 
-.headeru{
+.headeru {
   background-color: #007bff;
   color: white;
   padding: 20px;
-  margin:0px 20px;
+  margin: 0px 20px;
   border-radius: 10px;
   text-align: center;
 }
@@ -59,7 +59,7 @@
   text-align: center;
 }
 
-.search-icon{
+.search-icon {
   margin-left: 10px;
 
 }
@@ -86,7 +86,7 @@
 
 .event-card:hover {
   transform: scale(1.05);
-  box-shadow: 0px 4px 10px  #696969;
+  box-shadow: 0px 4px 10px #696969;
 }
 
 .event-title {
@@ -138,6 +138,8 @@
 
 .content {
   flex: 1;
+  margin-top: 80px;
+  /* Increased to avoid overlap with navbar */
 }
 
 .footer {
@@ -150,7 +152,7 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.footer-p{
+.footer-p {
   color: white;
 }
 
@@ -178,6 +180,8 @@
   align-items: center;
   padding: 0 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  /* Ensure navbar stays on top */
 }
 
 .menu-icon {
@@ -195,12 +199,15 @@
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px;  /* Hidden initially */
+  left: -250px;
+  /* Hidden initially */
   width: 250px;
   height: 100vh;
   background: #333;
   padding-top: 60px;
   transition: 0.3s ease;
+  z-index: 999;
+  /* Ensure sidebar stays below navbar */
 }
 
 .sidebar.open {
@@ -242,7 +249,8 @@
 
 /* Content spacing so navbar doesn't overlap */
 .content {
-  margin-top: 70px;
+  margin-top: 80px;
+  /* Increased to avoid overlap with navbar */
 }
 
 /* Feedback Button */
@@ -271,5 +279,25 @@
   .sidebar ul li {
     padding: 12px;
     font-size: 16px;
+  }
+
+  .content {
+    margin-top: 90px;
+    /* Adjusted for smaller screens */
+  }
+
+  .hero-title {
+    font-size: 28px;
+    /* Reduced font size for better fit */
+  }
+
+  .hero-subtitle {
+    font-size: 16px;
+    /* Adjusted for smaller screens */
+  }
+
+  .event-card {
+    width: 90%;
+    /* Adjusted width for smaller screens */
   }
 }
