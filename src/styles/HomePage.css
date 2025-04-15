@@ -1,68 +1,111 @@
 /* HomePage.css */
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .home-container {
-    position: relative;
-    height: 100vh;
-    /* background: url('/images/event-bg.jpg') no-repeat center center/cover; */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    padding: 20px;
 }
 
 .overlay {
-    background-color: rgba(0, 0, 0, 0.6); /* Dark transparent overlay */
-    padding: 60px;
-    border-radius: 15px;
-    text-align: center;
-    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 60px 40px;
     max-width: 600px;
-    width: 90%;
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
 }
 
 .overlay h1 {
-    font-size: 2.8rem;
+    font-size: 2.5rem;
     margin-bottom: 20px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }
 
 .overlay p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-bottom: 40px;
+    opacity: 0.9;
 }
 
 .button-container {
     display: flex;
+    flex-direction: row;
     gap: 20px;
     justify-content: center;
     flex-wrap: wrap;
 }
 
 .btn {
-    padding: 12px 30px;
+    padding: 12px 28px;
+    border-radius: 10px;
     font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+    font-weight: 500;
     text-decoration: none;
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
 }
 
 .admin-btn {
-    background-color: #3498db;
-    color: white;
+    background: #3498db;
+    color: #fff;
 }
 
 .admin-btn:hover {
-    background-color: #2980b9;
-    transform: scale(1.05);
+    background: #2980b9;
+    transform: translateY(-3px);
 }
 
 .student-btn {
-    background-color: #2ecc71;
-    color: white;
+    background: #2ecc71;
+    color: #fff;
 }
 
 .student-btn:hover {
-    background-color: #27ae60;
-    transform: scale(1.05);
+    background: #27ae60;
+    transform: translateY(-3px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .overlay {
+        padding: 40px 20px;
+    }
+
+    .overlay h1 {
+        font-size: 1.8rem;
+    }
+
+    .overlay p {
+        font-size: 1rem;
+    }
+
+    .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .button-container {
+        flex-direction: column;
+    }
 }
