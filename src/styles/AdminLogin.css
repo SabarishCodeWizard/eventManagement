@@ -1,185 +1,124 @@
-/* Login Page */
+/* AdminLogin.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #2c3e50, #4ca1af); /* Dark blue gradient */
+}
+
 .admin-login-container {
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100%;
+  justify-content: center;
   height: 100vh;
-  background-color: #f8f9fa;
-  /* Light gray background */
+  padding: 40px;
 }
 
 .login-card {
-  background: white;
-  padding: 35px;
-  border-radius: 12px;
-  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+  background: #ffffff;
+  color: #2c3e50;
   width: 100%;
   max-width: 400px;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
+  transition: transform 0.3s ease;
 }
 
-/* Header */
-h2 {
-  color: #003366;
-  /* Darker blue for a professional look */
-  font-size: 26px;
-  /* Slightly larger font */
-  font-weight: 700;
-  /* Bold for emphasis */
-  margin-bottom: 16px;
-  /* Increased spacing */
-}
-
-p {
-  font-size: 16px;
-  /* Slightly larger font */
-  margin-bottom: 24px;
-  /* Increased spacing */
-  color: #444;
-  /* Darker gray for better readability */
-}
-
-/* Error Message */
-.error-message {
-  background: #d9534f;
-  /* Bootstrap danger color */
-  color: white;
-  padding: 14px;
-  /* Slightly larger padding */
-  border-radius: 8px;
-  /* More rounded corners */
-  margin-bottom: 16px;
-  /* Increased spacing */
-  font-size: 15px;
-  /* Slightly larger font */
+.login-card h2 {
+  margin-bottom: 20px;
+  font-size: 2rem;
   font-weight: 600;
-  /* Semi-bold for readability */
-  text-align: center;
 }
 
-/* Form Styling */
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  /* Increased gap for better spacing */
+.login-card p {
+  margin-bottom: 30px;
+  color: #7f8c8d;
+  font-size: 1rem;
 }
 
 .form-group {
+  margin-bottom: 20px;
   text-align: left;
 }
 
 .form-group label {
-  font-weight: 700;
-  /* Bolder text for labels */
-  margin-bottom: 8px;
-  /* Increased spacing */
-  display: block;
-  color: #222;
-  /* Darker text for better contrast */
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2c3e50;
 }
 
 .form-group input {
   width: 100%;
-  padding: 14px;
-  /* Slightly larger padding */
-  border: 1px solid #bbb;
-  /* Softer border color */
-  border-radius: 10px;
-  /* More rounded corners */
-  font-size: 16px;
-  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #bdc3c7;
+  font-size: 1rem;
+  color: #2c3e50;
+  background: #f9f9f9;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .form-group input:focus {
-  border-color: #0056b3;
-  /* Consistent with theme */
-  box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
-  /* Subtle glow effect */
+  border-color: #3498db;
+  background-color: #f0f8ff;
   outline: none;
 }
 
-/* Login Button */
 .login-btn {
-  background: linear-gradient(135deg, #0056b3, #003d82);
-  /* Refined gradient */
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  background-color: #8e44ad;
   color: white;
-  padding: 16px;
-  /* Slightly larger padding */
   border: none;
-  border-radius: 10px;
-  /* More rounded corners */
   cursor: pointer;
-  font-size: 17px;
-  /* Slightly larger font */
-  font-weight: 700;
-  /* Bolder text */
-  transition: all 0.3s ease-in-out;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  /* Slightly stronger shadow */
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .login-btn:hover {
-  background: linear-gradient(135deg, #003d82, #00264d);
-  /* Darker hover effect */
-  transform: translateY(-3px);
-  /* Slightly more pronounced lift */
-  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
-  /* Enhanced shadow on hover */
+  background-color: #732d91;
+  transform: translateY(-2px);
 }
 
-/* Google Sign-In Button */
-.google-signin-btn {
-  background-color: #db4437;
-  /* Google red */
-  color: white;
-  border: none;
-  padding: 14px;
-  width: 100%;
-  font-size: 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.google-signin-btn i {
-  font-size: 18px;
-  /* Icon size */
-}
-
-.google-signin-btn:hover {
-  background-color: #c1351d;
-  /* Darker red on hover */
+.error-message {
+  color: #e74c3c;
+  background-color: #f8d7da;
+  border: 1px solid #e74c3c;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
 }
 
 /* Responsive Design */
 @media (max-width: 600px) {
-  .login-card {
-    padding: 30px;
-    /* Slightly larger padding for better spacing */
+  .admin-login-container {
+      padding: 20px;
   }
 
-  h2 {
-    font-size: 24px;
-    /* Adjusted for smaller screens */
+  .login-card {
+      padding: 25px;
+  }
+
+  .login-card h2 {
+      font-size: 1.8rem;
   }
 
   .form-group input {
-    font-size: 15px;
-    /* Adjusted for smaller screens */
-    padding: 12px;
-    /* Consistent with smaller input size */
+      font-size: 1rem;
   }
 
   .login-btn {
-    font-size: 15px;
-    /* Adjusted for smaller screens */
-    padding: 14px;
-    /* Consistent with smaller button size */
+      font-size: 1rem;
   }
 }

@@ -1,99 +1,144 @@
-/* Center the login container */
+/* StudentLogin.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+}
+
 .login-container {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   height: 100vh;
-  background-color: #f8f9fa;
+  padding: 40px;
 }
 
-/* Style the card */
 .login-card {
-  background: white;
-  padding: 20px;
+  background: #ffffff;
+  color: #2c3e50;
   width: 100%;
   max-width: 400px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   text-align: center;
+  transition: transform 0.3s ease;
 }
 
-/* Title styling */
 .login-title {
-  color: #007bff;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
-/* Text styling */
 .login-text {
-  color: #6c757d;
-  font-size: 14px;
+  margin-bottom: 30px;
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+.login-form {
   margin-bottom: 20px;
 }
 
-/* OR text */
-.or-text {
-  font-size: 14px;
-  color: #777;
-  margin: 10px 0;
-}
-
-/* Login Form */
-.login-form {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Input fields */
 .login-input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+  padding: 12px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #bdc3c7;
+  font-size: 1rem;
+  color: #2c3e50;
+  background: #f9f9f9;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-/* Login Button */
+.login-input:focus {
+  border-color: #3498db;
+  background-color: #f0f8ff;
+  outline: none;
+}
+
 .login-btn {
-  background-color: #007bff;
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  background-color: #8e44ad; /* Purple */
   color: white;
   border: none;
-  padding: 10px;
-  width: 100%;
-  font-size: 16px;
-  border-radius: 4px;
   cursor: pointer;
-  margin-bottom: 10px;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-/* Login Button hover */
 .login-btn:hover {
-  background-color: #0056b3;
+  background-color: #732d91;
+  transform: translateY(-2px);
 }
 
-/* Google Sign-In Button */
+.or-text {
+  margin: 20px 0;
+  font-size: 1rem;
+  color: #7f8c8d;
+}
+
 .google-signin-btn {
-  background-color: #db4437;
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  background-color: #4285f4; /* Google Blue */
   color: white;
   border: none;
-  padding: 10px;
-  width: 100%;
-  font-size: 16px;
-  border-radius: 4px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
-/* Google icon */
-.google-signin-btn i {
-  font-size: 18px;
-}
-
-/* Button hover effect */
 .google-signin-btn:hover {
-  background-color: #c1351d;
+  background-color: #357ae8;
+  transform: translateY(-2px);
+}
+
+.google-signin-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .login-container {
+      padding: 20px;
+  }
+
+  .login-card {
+      padding: 25px;
+  }
+
+  .login-title {
+      font-size: 1.8rem;
+  }
+
+  .login-input {
+      font-size: 1rem;
+  }
+
+  .login-btn {
+      font-size: 1rem;
+  }
+
+  .google-signin-btn {
+      font-size: 1rem;
+  }
 }
