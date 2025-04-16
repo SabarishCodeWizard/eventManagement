@@ -89,11 +89,12 @@ body {
 }
 
 .google-signin-btn {
+  margin: 0 auto; /* 👈 Center horizontally */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px;
+  padding: 12px 20px;
   border-radius: 25px;
   background-color: #fff;
   color: #444;
@@ -102,6 +103,7 @@ body {
   border: 1px solid #ccc;
   cursor: pointer;
   transition: background 0.3s ease;
+  width: fit-content; /* 👈 prevent it from stretching full width */
 }
 
 .google-signin-btn:hover {
