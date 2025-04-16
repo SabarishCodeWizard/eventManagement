@@ -11,7 +11,13 @@
 /* Animation for left section */
 .left-section {
     flex: 1;
-    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    background: linear-gradient(135deg, #ff512f, #dd2476);
+    /* background: linear-gradient(135deg, #e52d27, #b31217); */
+    /* background: linear-gradient(135deg, #ff7e5f, #feb47b); */
+    /* background: linear-gradient(135deg, #6a11cb, #2575fc);
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    background: linear-gradient(135deg, #0cebeb, #20e3b2, #29ffc6);
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); */
     color: white;
     padding: 2rem;
     display: flex;
@@ -147,21 +153,21 @@
 }
 
 .admin-btn:hover {
-    background-color: white;
-    color: #343a40;
+    background-color: rgb(10, 8, 8);
+    color: white;
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     animation: none;
 }
 
 .student-btn {
-    background-color: white;
-    color: #6e8efb;
+    background-color: #5477eb;
+    color: white;
     border: 2px solid #6e8efb;
 }
 
 .student-btn:hover {
-    background-color: #6e8efb;
+    background-color: #395dd2;
     color: white;
     transform: translateY(-2px) scale(1.03);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
