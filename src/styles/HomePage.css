@@ -1,16 +1,30 @@
-/* HomePage.css */
+/* Fonts Form Google Font ::- https://fonts.google.com/  -:: */
+@import url('https://fonts.googleapis.com/css?family=Abel|Abril+Fatface|Alegreya|Arima+Madurai|Dancing+Script|Dosis|Merriweather|Oleo+Script|Overlock|PT+Serif|Pacifico|Playball|Playfair+Display|Share|Unica+One|Vibur');
 
+/* End Fonts */
+/* Start Global rules */
 * {
-    margin: 0;
     padding: 0;
+    margin: 0;
     box-sizing: border-box;
 }
 
-body, html {
-    height: 100%;
-    font-family: 'Poppins', 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #8360c3, #2ebf91); /* Violet to teal */
+/* End Global rules */
+
+/* Start body rules */
+body {
+    background-image: linear-gradient(-225deg, #E3FDF5 0%, #FFE6FA 100%);
+    background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+
+    font-family: 'Vibur', cursive;
+    /*   the main font */
+    font-family: 'Abel', sans-serif;
+    opacity: .95;
+    /* background-image: linear-gradient(to top, #d9afd9 0%, #97d9e1 100%); */
 }
+
 
 .home-container {
     display: flex;
@@ -20,7 +34,7 @@ body, html {
     height: 100vh;
     padding: 40px;
     gap: 60px;
-    color: #f0f4f8;
+    color: black;
 }
 
 .left-section {
@@ -33,12 +47,12 @@ body, html {
     margin-bottom: 20px;
     font-weight: 700;
     line-height: 1.2;
-    color: #fefefe;
+    color: brown;
 }
 
 .left-section p {
     font-size: 1.2rem;
-    color: #e0e7ef;
+    color: black;
     line-height: 1.6;
     opacity: 0.95;
 }
@@ -79,7 +93,8 @@ body, html {
 }
 
 .admin-btn {
-    background-color: #8e44ad; /* Plum */
+    background-color: #8e44ad;
+    /* Plum */
     color: white;
 }
 
@@ -89,7 +104,8 @@ body, html {
 }
 
 .student-btn {
-    background-color: #1abc9c; /* Teal */
+    background-color: #1abc9c;
+    /* Teal */
     color: white;
 }
 
