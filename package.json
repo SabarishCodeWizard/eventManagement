@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.3",
     "college-event-management": "file:",
+    "date-fns": "^4.1.0",
     "firebase": "^11.4.0",
     "react": "^19.0.0",
     "react-confirm-alert": "^3.0.6",
