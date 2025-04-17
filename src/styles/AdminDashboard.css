@@ -31,12 +31,13 @@
 
 @keyframes fadeInDown {
   from {
-      opacity: 0;
-      transform: translateY(-20px);
+    opacity: 0;
+    transform: translateY(-20px);
   }
+
   to {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -70,12 +71,13 @@
 
 @media (min-width: 992px) {
   .admin-content {
-      grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 2fr;
   }
 }
 
 /* Form card styles */
-.form-card, .event-cardu {
+.form-card,
+.event-cardu {
   background: white;
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
@@ -84,11 +86,17 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-.form-card h3, .event-cardu h3 {
+.form-card h3,
+.event-cardu h3 {
   color: #2c3e50;
   margin-top: 0;
   margin-bottom: 20px;
@@ -104,7 +112,9 @@ form {
   gap: 15px;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   padding: 12px 15px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -114,7 +124,9 @@ input, textarea, select {
   width: 100%;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   border-color: #6e8efb;
   box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.2);
   outline: none;
@@ -153,14 +165,19 @@ textarea {
   background: linear-gradient(135deg, #5e7de9 0%, #9668d8 100%);
 }
 
-.edit-btn, .delete-btn {
+.edit-btn,
+.delete-btn {
   padding: 8px 12px;
   border: none;
   border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-right: 5px;
+  display: inline-block;
+  width: 100px;
+  /* Ensuring consistent width */
+  text-align: center;
+  /* Aligning text */
 }
 
 .edit-btn {
@@ -188,6 +205,12 @@ textarea {
   text-decoration: none;
 }
 
+/* Aligning buttons to left and right */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* Table styles */
 .event-table {
   width: 100%;
@@ -198,16 +221,18 @@ textarea {
 
 @keyframes fadeInUp {
   from {
-      opacity: 0;
-      transform: translateY(20px);
+    opacity: 0;
+    transform: translateY(20px);
   }
+
   to {
-      opacity: 1;
-      transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.event-table th, .event-table td {
+.event-table th,
+.event-table td {
   padding: 12px 15px;
   text-align: left;
   border-bottom: 1px solid #f0f0f0;
@@ -240,28 +265,31 @@ textarea {
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .admin-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
   }
-  
+
   .datetime {
-      grid-template-columns: 1fr;
+    grid-template-columns: 1fr;
   }
-  
+
   .event-table {
-      display: block;
-      overflow-x: auto;
+    display: block;
+    overflow-x: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .form-card, .event-cardu {
-      padding: 20px 15px;
+
+  .form-card,
+  .event-cardu {
+    padding: 20px 15px;
   }
-  
-  .edit-btn, .delete-btn {
-      padding: 6px 10px;
-      font-size: 14px;
+
+  .edit-btn,
+  .delete-btn {
+    padding: 6px 10px;
+    font-size: 14px;
   }
 }
