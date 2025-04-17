@@ -181,7 +181,7 @@ const AdminDashboard = () => {
                   <div className="form-group">
                     <label>Date *</label>
                     <div className="input-with-icon">
-                      <FiCalendar />
+                      {/* <FiCalendar /> */}
                       <input 
                         type="date" 
                         name="eventDate"
@@ -194,7 +194,7 @@ const AdminDashboard = () => {
                   <div className="form-group">
                     <label>Time *</label>
                     <div className="input-with-icon">
-                      <FiClock />
+                      {/* <FiClock /> */}
                       <input 
                         type="time" 
                         name="eventTime"
@@ -209,7 +209,7 @@ const AdminDashboard = () => {
                 <div className="form-group">
                   <label>Location *</label>
                   <div className="input-with-icon">
-                    <FiMapPin />
+                    {/* <FiMapPin /> */}
                     <input 
                       type="text" 
                       name="eventLocation"
@@ -252,7 +252,7 @@ const AdminDashboard = () => {
                 <div className="form-group">
                   <label>Registration Link *</label>
                   <div className="input-with-icon">
-                    <FiLink />
+                    {/* <FiLink /> */}
                     <input 
                       type="url" 
                       name="eventLink"
