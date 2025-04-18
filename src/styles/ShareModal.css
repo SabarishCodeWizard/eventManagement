@@ -1,5 +1,5 @@
-/* Share Modal Styles - More Specific Selectors */
-.share-modal-overlay {
+/* Event Share Modal Styles (unique class names) */
+.event-share-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -12,16 +12,16 @@
     z-index: 1000;
 }
 
-.share-modal-content {
+.event-share-modal {
     background-color: white;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    animation: share-modal-fadeIn 0.3s ease-out;
+    animation: event-share-modalFadeIn 0.3s ease-out;
 }
 
-@keyframes share-modal-fadeIn {
+@keyframes event-share-modalFadeIn {
     from {
         opacity: 0;
         transform: translateY(-20px);
@@ -33,7 +33,7 @@
     }
 }
 
-.share-modal-header {
+.event-share-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -41,13 +41,13 @@
     border-bottom: 1px solid #eee;
 }
 
-.share-modal-header h3 {
+.event-share-modal-header h3 {
     margin: 0;
     font-size: 1.2rem;
     color: #333;
 }
 
-.share-modal-close-btn {
+.event-share-close-btn {
     background: none;
     border: none;
     font-size: 1.2rem;
@@ -55,21 +55,21 @@
     color: #666;
 }
 
-.share-modal-close-btn:hover {
+.event-share-close-btn:hover {
     color: #333;
 }
 
-.share-modal-body {
+.event-share-modal-body {
     padding: 1.5rem;
 }
 
-.share-modal-options {
+.event-share-options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
 }
 
-.share-modal-option {
+.event-share-option {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -80,49 +80,49 @@
     background-color: #f9f9f9;
 }
 
-.share-modal-option:hover {
+.event-share-option:hover {
     background-color: #f0f0f0;
     transform: translateY(-2px);
 }
 
-.share-modal-icon {
+.event-share-icon {
     font-size: 2rem;
     margin-bottom: 0.5rem;
 }
 
-.share-modal-icon.facebook {
+.event-share-facebook {
     color: #3b5998;
 }
 
-.share-modal-icon.twitter {
+.event-share-twitter {
     color: #1da1f2;
 }
 
-.share-modal-icon.linkedin {
+.event-share-linkedin {
     color: #0077b5;
 }
 
-.share-modal-icon.whatsapp {
+.event-share-whatsapp {
     color: #25d366;
 }
 
-.share-modal-icon.link {
+.event-share-link {
     color: #666;
 }
 
-.share-modal-option span {
+.event-share-option span {
     font-size: 0.9rem;
     color: #333;
 }
 
-.share-modal-footer {
+.event-share-modal-footer {
     padding: 1rem;
     border-top: 1px solid #eee;
     display: flex;
     justify-content: flex-end;
 }
 
-.share-modal-cancel-btn {
+.event-share-cancel-btn {
     padding: 0.5rem 1rem;
     background-color: #f0f0f0;
     border: none;
@@ -131,12 +131,12 @@
     transition: background-color 0.2s ease;
 }
 
-.share-modal-cancel-btn:hover {
+.event-share-cancel-btn:hover {
     background-color: #e0e0e0;
 }
 
-/* Event card share button - more specific */
-.event-card .share-btn {
+/* Event card share button (unique class name) */
+.event-card-share-btn {
     background: none;
     border: none;
     color: #666;
@@ -146,6 +146,6 @@
     transition: color 0.2s ease;
 }
 
-.event-card .share-btn:hover {
+.event-card-share-btn:hover {
     color: #333;
 }

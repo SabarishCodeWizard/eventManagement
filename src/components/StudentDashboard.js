@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
 import { collection, getDocs, query, orderBy, where } from "firebase/firestore";
 import "../styles/StudentDashboard.css";
-import { 
-  FaSearch, FaBars, FaTimes, FaArrowLeft, FaCalendarAlt, 
-  FaClock, FaMapMarkerAlt, FaFilter, FaStar, FaRegStar,
-  FaUserFriends, FaTicketAlt, FaInfoCircle, FaShareAlt 
+import {
+    FaSearch, FaBars, FaTimes, FaArrowLeft, FaCalendarAlt,
+    FaClock, FaMapMarkerAlt, FaFilter, FaStar, FaRegStar,
+    FaUserFriends, FaTicketAlt, FaInfoCircle, FaShareAlt
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { format, parseISO, isAfter, isToday } from 'date-fns';
@@ -36,15 +36,15 @@ const StudentDashboard = () => {
             try {
                 const q = query(collection(db, "events"), orderBy("eventDate", "asc"));
                 const eventCollection = await getDocs(q);
-                const eventsData = eventCollection.docs.map(doc => ({ 
-                    id: doc.id, 
+                const eventsData = eventCollection.docs.map(doc => ({
+                    id: doc.id,
                     ...doc.data(),
                     formattedDate: format(parseISO(doc.data().eventDate), 'MMM dd, yyyy'),
-                    isUpcoming: isAfter(parseISO(doc.data().eventDate), new Date()) || 
-                               isToday(parseISO(doc.data().eventDate))
+                    isUpcoming: isAfter(parseISO(doc.data().eventDate), new Date()) ||
+                        isToday(parseISO(doc.data().eventDate))
                 }));
                 setEvents(eventsData);
-                
+
                 // Load favorites from localStorage
                 const savedFavorites = JSON.parse(localStorage.getItem('eventFavorites')) || [];
                 setFavorites(savedFavorites);
@@ -98,22 +98,22 @@ const StudentDashboard = () => {
     // Filter events based on search input and selected filters
     const filteredEvents = events.filter(event => {
         // Search filter
-        const matchesSearch = 
+        const matchesSearch =
             event.eventName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             event.eventLocation.toLowerCase().includes(searchQuery.toLowerCase()) ||
             event.eventDesc.toLowerCase().includes(searchQuery.toLowerCase());
-        
+
         // Category filter
-        const matchesCategory = 
-            selectedCategories.length === 0 || 
+        const matchesCategory =
+            selectedCategories.length === 0 ||
             selectedCategories.includes(event.eventCategory);
-        
+
         // Upcoming filter
         const matchesUpcoming = !upcomingOnly || event.isUpcoming;
-        
+
         // Free events filter
         const matchesFree = !freeOnly || (event.eventFee === "0" || !event.eventFee);
-        
+
         return matchesSearch && matchesCategory && matchesUpcoming && matchesFree;
     });
 
@@ -140,7 +140,7 @@ const StudentDashboard = () => {
     return (
         <div className="dashboard-container">
             <ToastContainer position="top-right" autoClose={3000} />
-            
+
             {/* Navbar */}
             <nav className="navbar">
                 <div className="menu-icon" onClick={() => setMenuOpen(true)}>
@@ -185,7 +185,7 @@ const StudentDashboard = () => {
                             />
                             <FaSearch className="search-icon" />
                         </div>
-                        <button 
+                        <button
                             className="filter-toggle"
                             onClick={() => setFilterOpen(!filterOpen)}
                         >
@@ -251,14 +251,14 @@ const StudentDashboard = () => {
                                     <div className="card-header">
                                         <h3 className="event-title">{event.eventName}</h3>
                                         <div className="event-actions">
-                                            <button 
+                                            <button
                                                 className={`favorite-btn ${favorites.includes(event.id) ? 'active' : ''}`}
                                                 onClick={() => toggleFavorite(event.id)}
                                                 aria-label={favorites.includes(event.id) ? "Remove from favorites" : "Add to favorites"}
                                             >
                                                 {favorites.includes(event.id) ? <FaStar /> : <FaRegStar />}
                                             </button>
-                                            <button 
+                                            <button
                                                 className="share-btn"
                                                 onClick={() => openShareModal(event)}
                                                 aria-label="Share event"
@@ -283,12 +283,12 @@ const StudentDashboard = () => {
                                     </div>
                                     <div className="event-description-container">
                                         <p className="event-description">
-                                            {showEventDetails === event.id ? 
-                                                event.eventDesc : 
+                                            {showEventDetails === event.id ?
+                                                event.eventDesc :
                                                 `${event.eventDesc.substring(0, 100)}...`}
                                         </p>
                                         {event.eventDesc.length > 100 && (
-                                            <button 
+                                            <button
                                                 className="read-more-btn"
                                                 onClick={() => toggleEventDetails(event.id)}
                                             >
@@ -302,8 +302,8 @@ const StudentDashboard = () => {
                                             onClick={() => registerForEvent(event.id, event.eventLink)}
                                             disabled={!event.isUpcoming}
                                         >
-                                            {registeredEvents.includes(event.id) ? 
-                                                'Registered' : 
+                                            {registeredEvents.includes(event.id) ?
+                                                'Registered' :
                                                 'Register Now'}
                                         </button>
                                         {!event.isUpcoming && (
@@ -327,9 +327,9 @@ const StudentDashboard = () => {
 
             {/* Share Modal */}
             {showShareModal && (
-                <ShareModal 
-                    event={currentEvent} 
-                    onClose={closeShareModal} 
+                <ShareModal
+                    event={currentEvent}
+                    onClose={closeShareModal}
                 />
             )}
 
