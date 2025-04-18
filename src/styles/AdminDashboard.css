@@ -392,18 +392,11 @@ textarea {
   transform: translateY(-1px);
 }
 
-/* Footer styles */
-.footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #2c3e50;
-  color: white;
-  margin-top: 40px;
-}
-
-.footer-p {
-  margin: 0;
-  font-size: 14px;
+/* Hide footer on mobile */
+@media (max-width: 768px) {
+  .footer {
+    display: none;
+  }
 }
 
 /* Animations */
@@ -412,6 +405,7 @@ textarea {
     opacity: 0;
     transform: translateY(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -422,6 +416,7 @@ textarea {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -432,6 +427,7 @@ textarea {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -443,7 +439,7 @@ textarea {
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .event-table th,
   .event-table td {
     padding: 12px 10px;
@@ -455,15 +451,15 @@ textarea {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .search-bar {
     max-width: 100%;
   }
-  
+
   .event-count {
     justify-content: center;
   }
-  
+
   .form-card,
   .event-list-card {
     padding: 20px;
@@ -474,14 +470,119 @@ textarea {
   .action-buttons {
     flex-direction: column;
   }
-  
+
   .form-actions {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .cancel-btn {
     margin-right: 0;
     margin-bottom: 10px;
+  }
+}
+
+/* Mobile-specific fixes */
+@media (max-width: 768px) {
+
+  /* Fix header layout */
+  .header-controls {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .search-bar {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .event-count {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .event-count span {
+    width: fit-content;
+  }
+
+  /* Form adjustments */
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Table adjustments */
+  .event-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .event-table th,
+  .event-table td {
+    min-width: 120px;
+    white-space: nowrap;
+  }
+
+  /* Action buttons */
+  .action-buttons {
+    flex-direction: column;
+    gap: 8px;
+    min-width: 80px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  /* Form card padding */
+  .form-card,
+  .event-list-card {
+    padding: 15px;
+  }
+
+  /* Filter select width */
+  .event-filters select {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* Even smaller screens */
+  .admin-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .form-card h3,
+  .event-list-card h3 {
+    font-size: 1.3rem;
+  }
+
+  /* Make form inputs full width */
+  input,
+  textarea,
+  select {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Adjust event description in table */
+  .event-desc {
+    display: none;
+    /* Hide description on very small screens */
+  }
+
+  /* Category badge adjustments */
+  .category-badge {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80px;
+    display: inline-block;
   }
 }
