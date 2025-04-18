@@ -1,7 +1,6 @@
 import React from 'react';
 import { FaTimes, FaFacebook, FaTwitter, FaLinkedin, FaLink, FaWhatsapp } from 'react-icons/fa';
 import { EmailShareButton, FacebookShareButton, TwitterShareButton, LinkedinShareButton, WhatsappShareButton } from "react-share";
-import "../styles/ShareModal.css";
 
 const ShareModal = ({ event, onClose }) => {
     if (!event) return null;
@@ -16,23 +15,23 @@ const ShareModal = ({ event, onClose }) => {
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="share-modal">
-                <div className="modal-header">
+        <div className="share-modal-overlay">
+            <div className="share-modal-content">
+                <div className="share-modal-header">
                     <h3>Share this event</h3>
-                    <button className="close-btn" onClick={onClose}>
+                    <button className="share-modal-close-btn" onClick={onClose}>
                         <FaTimes />
                     </button>
                 </div>
-                <div className="modal-body">
-                    <div className="share-options">
+                <div className="share-modal-body">
+                    <div className="share-modal-options">
                         <FacebookShareButton
                             url={shareUrl}
                             quote={title}
-                            className="share-button"
+                            className="share-modal-button"
                         >
-                            <div className="share-option">
-                                <FaFacebook className="share-icon facebook" />
+                            <div className="share-modal-option">
+                                <FaFacebook className="share-modal-icon facebook" />
                                 <span>Facebook</span>
                             </div>
                         </FacebookShareButton>
@@ -40,10 +39,10 @@ const ShareModal = ({ event, onClose }) => {
                         <TwitterShareButton
                             url={shareUrl}
                             title={title}
-                            className="share-button"
+                            className="share-modal-button"
                         >
-                            <div className="share-option">
-                                <FaTwitter className="share-icon twitter" />
+                            <div className="share-modal-option">
+                                <FaTwitter className="share-modal-icon twitter" />
                                 <span>Twitter</span>
                             </div>
                         </TwitterShareButton>
@@ -52,10 +51,10 @@ const ShareModal = ({ event, onClose }) => {
                             url={shareUrl}
                             title={title}
                             summary={description}
-                            className="share-button"
+                            className="share-modal-button"
                         >
-                            <div className="share-option">
-                                <FaLinkedin className="share-icon linkedin" />
+                            <div className="share-modal-option">
+                                <FaLinkedin className="share-modal-icon linkedin" />
                                 <span>LinkedIn</span>
                             </div>
                         </LinkedinShareButton>
@@ -63,22 +62,22 @@ const ShareModal = ({ event, onClose }) => {
                         <WhatsappShareButton
                             url={shareUrl}
                             title={title}
-                            className="share-button"
+                            className="share-modal-button"
                         >
-                            <div className="share-option">
-                                <FaWhatsapp className="share-icon whatsapp" />
+                            <div className="share-modal-option">
+                                <FaWhatsapp className="share-modal-icon whatsapp" />
                                 <span>WhatsApp</span>
                             </div>
                         </WhatsappShareButton>
 
-                        <div className="share-option" onClick={copyToClipboard}>
-                            <FaLink className="share-icon link" />
+                        <div className="share-modal-option" onClick={copyToClipboard}>
+                            <FaLink className="share-modal-icon link" />
                             <span>Copy Link</span>
                         </div>
                     </div>
                 </div>
-                <div className="modal-footer">
-                    <button className="cancel-btn" onClick={onClose}>
+                <div className="share-modal-footer">
+                    <button className="share-modal-cancel-btn" onClick={onClose}>
                         Close
                     </button>
                 </div>

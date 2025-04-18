@@ -1,5 +1,5 @@
-/* Share Modal Styles */
-.modal-overlay {
+/* Share Modal Styles - More Specific Selectors */
+.share-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -12,16 +12,16 @@
     z-index: 1000;
 }
 
-.share-modal {
+.share-modal-content {
     background-color: white;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    animation: modalFadeIn 0.3s ease-out;
+    animation: share-modal-fadeIn 0.3s ease-out;
 }
 
-@keyframes modalFadeIn {
+@keyframes share-modal-fadeIn {
     from {
         opacity: 0;
         transform: translateY(-20px);
@@ -33,7 +33,7 @@
     }
 }
 
-.modal-header {
+.share-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -41,13 +41,13 @@
     border-bottom: 1px solid #eee;
 }
 
-.modal-header h3 {
+.share-modal-header h3 {
     margin: 0;
     font-size: 1.2rem;
     color: #333;
 }
 
-.close-btn {
+.share-modal-close-btn {
     background: none;
     border: none;
     font-size: 1.2rem;
@@ -55,21 +55,21 @@
     color: #666;
 }
 
-.close-btn:hover {
+.share-modal-close-btn:hover {
     color: #333;
 }
 
-.modal-body {
+.share-modal-body {
     padding: 1.5rem;
 }
 
-.share-options {
+.share-modal-options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
 }
 
-.share-option {
+.share-modal-option {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -80,49 +80,49 @@
     background-color: #f9f9f9;
 }
 
-.share-option:hover {
+.share-modal-option:hover {
     background-color: #f0f0f0;
     transform: translateY(-2px);
 }
 
-.share-icon {
+.share-modal-icon {
     font-size: 2rem;
     margin-bottom: 0.5rem;
 }
 
-.facebook {
+.share-modal-icon.facebook {
     color: #3b5998;
 }
 
-.twitter {
+.share-modal-icon.twitter {
     color: #1da1f2;
 }
 
-.linkedin {
+.share-modal-icon.linkedin {
     color: #0077b5;
 }
 
-.whatsapp {
+.share-modal-icon.whatsapp {
     color: #25d366;
 }
 
-.link {
+.share-modal-icon.link {
     color: #666;
 }
 
-.share-option span {
+.share-modal-option span {
     font-size: 0.9rem;
     color: #333;
 }
 
-.modal-footer {
+.share-modal-footer {
     padding: 1rem;
     border-top: 1px solid #eee;
     display: flex;
     justify-content: flex-end;
 }
 
-.cancel-btn {
+.share-modal-cancel-btn {
     padding: 0.5rem 1rem;
     background-color: #f0f0f0;
     border: none;
@@ -131,12 +131,12 @@
     transition: background-color 0.2s ease;
 }
 
-.cancel-btn:hover {
+.share-modal-cancel-btn:hover {
     background-color: #e0e0e0;
 }
 
-/* Share button in event card */
-.share-btn {
+/* Event card share button - more specific */
+.event-card .share-btn {
     background: none;
     border: none;
     color: #666;
@@ -146,6 +146,6 @@
     transition: color 0.2s ease;
 }
 
-.share-btn:hover {
+.event-card .share-btn:hover {
     color: #333;
 }
