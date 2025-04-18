@@ -3,6 +3,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+// Add these imports at the top
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -32,5 +34,30 @@ const signInWithGoogle = async () => {
     }
 };
 
-// Export Firebase objects and functions
-export { auth, db, storage, signInWithGoogle };
+// Add these functions at the bottom
+const getUserProfile = async (userId) => {
+    try {
+        const docRef = doc(db, "userProfiles", userId);
+        const docSnap = await getDoc(docRef);
+        return docSnap.exists() ? docSnap.data() : null;
+    } catch (error) {
+        console.error("Error getting user profile:", error);
+        return null;
+    }
+};
+
+const updateUserProfile = async (userId, profileData) => {
+    try {
+        const docRef = doc(db, "userProfiles", userId);
+        await setDoc(docRef, profileData, { merge: true });
+        return true;
+    } catch (error) {
+        console.error("Error updating user profile:", error);
+        return false;
+    }
+};
+
+// Export the new functions
+export { auth, db, storage, signInWithGoogle, getUserProfile, updateUserProfile };
+
+

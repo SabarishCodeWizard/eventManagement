@@ -1,19 +1,31 @@
-import React, { useState } from "react";
-import { signInWithGoogle } from "../firebase";
+import React, { useState, useEffect } from "react";
+import { auth, signInWithGoogle } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import "../styles/StudentLogin.css";
+import "../styles/StudentLogin.css"
+
 
 const StudentLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleGoogleSignIn = async () => {
-    const user = await signInWithGoogle();
-    if (user) navigate("/student-dashboard");
-  };
+  useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged(user => {
+          if (user) {
+              navigate("/student-dashboard");
+          }
+      });
+      return unsubscribe;
+  }, [navigate]);
 
+  const handleGoogleSignIn = async () => {
+      try {
+          await signInWithGoogle();
+      } catch (error) {
+          console.error("Error signing in with Google:", error);
+      }
+  };
   const handleLogin = (e) => {
     e.preventDefault();
     console.log("Email:", email);

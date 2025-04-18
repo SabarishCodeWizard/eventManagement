@@ -13,6 +13,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ShareModal from "./ShareModal";
 import Profile from "./Profile";
+import { auth, getUserProfile, updateUserProfile } from "../firebase";
+
 
 const StudentDashboard = () => {
     const [events, setEvents] = useState([]);
@@ -29,21 +31,26 @@ const StudentDashboard = () => {
     const [registeredEvents, setRegisteredEvents] = useState([]);
     const [showEventDetails, setShowEventDetails] = useState(null);
     const [showProfile, setShowProfile] = useState(false);
+    // Update the initial user state
     const [user, setUser] = useState({
-        name: "Student User",
-        email: "student@university.edu",
+        name: "Guest",
+        email: "",
         bio: "",
         major: "",
         graduationYear: "",
-        interests: []
+        interests: [],
+        photoURL: null
     });
+
 
     // Get all unique categories from events
     const categories = [...new Set(events.map(event => event.eventCategory))];
 
+    // Update the fetchData function
     useEffect(() => {
-        const fetchEvents = async () => {
+        const fetchData = async () => {
             try {
+                // Load events
                 const q = query(collection(db, "events"), orderBy("eventDate", "asc"));
                 const eventCollection = await getDocs(q);
                 const eventsData = eventCollection.docs.map(doc => ({
@@ -55,40 +62,60 @@ const StudentDashboard = () => {
                 }));
                 setEvents(eventsData);
 
-                // Load favorites from localStorage
+                // Load favorites and registered events from localStorage
                 const savedFavorites = JSON.parse(localStorage.getItem('eventFavorites')) || [];
                 setFavorites(savedFavorites);
-
-                // Load registered events from localStorage
                 const savedRegistered = JSON.parse(localStorage.getItem('registeredEvents')) || [];
                 setRegisteredEvents(savedRegistered);
 
-                // Load user profile from localStorage
-                const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {
-                    name: "Student User",
-                    email: "student@university.edu",
-                    bio: "",
-                    major: "",
-                    graduationYear: "",
-                    interests: []
-                };
-                setUser(savedProfile);
+                // Load user profile from Firestore
+                const currentUser = auth.currentUser;
+                if (currentUser) {
+                    const userProfile = await getUserProfile(currentUser.uid);
+                    if (userProfile) {
+                        setUser(userProfile);
+                    } else {
+                        // Create default profile if doesn't exist
+                        const defaultProfile = {
+                            name: currentUser.displayName || "Student User",
+                            email: currentUser.email,
+                            bio: "",
+                            major: "",
+                            graduationYear: "",
+                            interests: [],
+                            photoURL: currentUser.photoURL || null
+                        };
+                        await updateUserProfile(currentUser.uid, defaultProfile);
+                        setUser(defaultProfile);
+                    }
+                } else {
+                    // Handle case when user is not logged in
+                    setUser({
+                        name: "Guest",
+                        email: "",
+                        bio: "",
+                        major: "",
+                        graduationYear: "",
+                        interests: [],
+                        photoURL: null
+                    });
+                }
             } catch (error) {
-                console.error("Error fetching events:", error);
-                toast.error("Failed to load events. Please try again later.");
+                console.error("Error loading data:", error);
+                toast.error("Failed to load data. Please try again later.");
             } finally {
                 setLoading(false);
             }
         };
-        fetchEvents();
+        fetchData();
     }, []);
 
-    // Save favorites, registered events, and profile to localStorage when they change
+    // Remove the localStorage setItem for user profile from the useEffect
     useEffect(() => {
         localStorage.setItem('eventFavorites', JSON.stringify(favorites));
         localStorage.setItem('registeredEvents', JSON.stringify(registeredEvents));
-        localStorage.setItem('userProfile', JSON.stringify(user));
-    }, [favorites, registeredEvents, user]);
+    }, [favorites, registeredEvents]);
+
 
     const toggleFavorite = (eventId) => {
         if (favorites.includes(eventId)) {
@@ -117,9 +144,18 @@ const StudentDashboard = () => {
         setShowShareModal(false);
     };
 
-    const handleUpdateProfile = (updatedProfile) => {
-        setUser(updatedProfile);
-        toast.success("Profile updated successfully!");
+    const handleUpdateProfile = async (updatedProfile) => {
+        try {
+            const currentUser = auth.currentUser;
+            if (currentUser) {
+                await updateUserProfile(currentUser.uid, updatedProfile);
+                setUser(updatedProfile);
+                toast.success("Profile updated successfully!");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            toast.error("Failed to update profile. Please try again.");
+        }
     };
 
     // Filter events based on search input and selected filters
@@ -200,7 +236,9 @@ const StudentDashboard = () => {
             <div className="content">
                 <header className="hero-section">
                     <div className="header-content">
-                        <h1 className="hero-title">Welcome back, {user.name.split(' ')[0]}!</h1>
+                        <h1 className="hero-title">
+                            Welcome back, {user ? user.name.split(' ')[0] : 'Guest'}!
+                        </h1>
                         <p className="hero-subtitle">
                             Discover and register for exciting events happening on your campus!
                         </p>
@@ -367,7 +405,7 @@ const StudentDashboard = () => {
 
             {/* Profile Modal */}
             {showProfile && (
-                <Profile 
+                <Profile
                     user={user}
                     onUpdateProfile={handleUpdateProfile}
                     onClose={() => setShowProfile(false)}

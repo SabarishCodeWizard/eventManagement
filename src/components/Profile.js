@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { FaUser, FaEdit, FaSave, FaTimes } from "react-icons/fa";
+import { FaUser, FaEdit, FaSave, FaTimes, FaCamera } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import "../styles/Profile.css"; // Import the CSS file for styling
+import { auth, storage, updateUserProfile as updateFirebaseProfile } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import "../styles/Profile.css";
 
 const Profile = ({ user, onUpdateProfile, onClose }) => {
     const [editMode, setEditMode] = useState(false);
@@ -12,18 +14,21 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
         bio: '',
         major: '',
         graduationYear: '',
-        interests: []
+        interests: [],
+        photoURL: ''
     });
+    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         if (user) {
             setFormData({
-                name: user.name || '',
+                name: user.displayName || user.name || '',
                 email: user.email || '',
                 bio: user.bio || '',
                 major: user.major || '',
                 graduationYear: user.graduationYear || '',
-                interests: user.interests || []
+                interests: user.interests || [],
+                photoURL: user.photoURL || user.avatarUrl || ''
             });
         }
     }, [user]);
@@ -53,11 +58,54 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+            setIsUploading(true);
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                toast.error("You must be logged in to upload a profile picture");
+                return;
+            }
+
+            const storageRef = ref(storage, `profilePictures/${currentUser.uid}`);
+            await uploadBytes(storageRef, file);
+            const photoURL = await getDownloadURL(storageRef);
+
+            setFormData(prev => ({
+                ...prev,
+                photoURL
+            }));
+
+            // Update in Firebase immediately
+            await updateFirebaseProfile(currentUser.uid, { photoURL });
+            toast.success("Profile picture updated successfully!");
+        } catch (error) {
+            console.error("Error uploading image:", error);
+            toast.error("Failed to upload profile picture");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onUpdateProfile(formData);
-        setEditMode(false);
-        toast.success("Profile updated successfully!");
+        try {
+            const currentUser = auth.currentUser;
+            if (!currentUser) {
+                toast.error("You must be logged in to update your profile");
+                return;
+            }
+
+            await onUpdateProfile(formData);
+            setEditMode(false);
+            toast.success("Profile updated successfully!");
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            toast.error("Failed to update profile");
+        }
     };
 
     const interestOptions = [
@@ -73,10 +121,10 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                     <div className="profile-actions">
                         {editMode ? (
                             <>
-                                <button onClick={handleSubmit} className="icon-btn">
-                                    <FaSave /> Save
+                                <button onClick={handleSubmit} className="icon-btn" disabled={isUploading}>
+                                    <FaSave /> {isUploading ? 'Uploading...' : 'Save'}
                                 </button>
-                                <button onClick={() => setEditMode(false)} className="icon-btn">
+                                <button onClick={() => setEditMode(false)} className="icon-btn" disabled={isUploading}>
                                     <FaTimes /> Cancel
                                 </button>
                             </>
@@ -96,6 +144,26 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                 <div className="profile-body">
                     {editMode ? (
                         <form onSubmit={handleSubmit} className="profile-form">
+                            <div className="avatar-upload-container">
+                                <div className="profile-avatar">
+                                    {formData.photoURL ? (
+                                        <img src={formData.photoURL} alt="Profile" className="profile-picture" />
+                                    ) : (
+                                        <FaUser className="avatar-icon" />
+                                    )}
+                                    <label className="upload-btn">
+                                        <FaCamera />
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                            style={{ display: 'none' }}
+                                            disabled={isUploading}
+                                        />
+                                    </label>
+                                </div>
+                            </div>
+                            
                             <div className="form-group">
                                 <label>Name</label>
                                 <input
@@ -104,6 +172,7 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                                     value={formData.name}
                                     onChange={handleChange}
                                     required
+                                    disabled={isUploading}
                                 />
                             </div>
                             <div className="form-group">
@@ -114,6 +183,7 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     required
+                                    disabled
                                 />
                             </div>
                             <div className="form-group">
@@ -123,6 +193,7 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                                     name="major"
                                     value={formData.major}
                                     onChange={handleChange}
+                                    disabled={isUploading}
                                 />
                             </div>
                             <div className="form-group">
@@ -132,6 +203,7 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                                     name="graduationYear"
                                     value={formData.graduationYear}
                                     onChange={handleChange}
+                                    disabled={isUploading}
                                 />
                             </div>
                             <div className="form-group">
@@ -141,6 +213,7 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                                     value={formData.bio}
                                     onChange={handleChange}
                                     rows="4"
+                                    disabled={isUploading}
                                 />
                             </div>
                             <div className="form-group">
@@ -153,6 +226,7 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                                                 value={interest}
                                                 checked={formData.interests.includes(interest)}
                                                 onChange={handleInterestChange}
+                                                disabled={isUploading}
                                             />
                                             {interest}
                                         </label>
@@ -163,7 +237,11 @@ const Profile = ({ user, onUpdateProfile, onClose }) => {
                     ) : (
                         <>
                             <div className="profile-avatar">
-                                <FaUser className="avatar-icon" />
+                                {formData.photoURL ? (
+                                    <img src={formData.photoURL} alt="Profile" className="profile-picture" />
+                                ) : (
+                                    <FaUser className="avatar-icon" />
+                                )}
                             </div>
                             <div className="profile-info">
                                 <h3>{formData.name}</h3>
