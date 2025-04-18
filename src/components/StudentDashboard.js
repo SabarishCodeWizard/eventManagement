@@ -5,13 +5,14 @@ import "../styles/StudentDashboard.css";
 import {
     FaSearch, FaBars, FaTimes, FaArrowLeft, FaCalendarAlt,
     FaClock, FaMapMarkerAlt, FaFilter, FaStar, FaRegStar,
-    FaUserFriends, FaTicketAlt, FaInfoCircle, FaShareAlt
+    FaUserFriends, FaTicketAlt, FaInfoCircle, FaShareAlt, FaUser
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { format, parseISO, isAfter, isToday } from 'date-fns';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ShareModal from "./ShareModal";
+import Profile from "./Profile";
 
 const StudentDashboard = () => {
     const [events, setEvents] = useState([]);
@@ -27,6 +28,15 @@ const StudentDashboard = () => {
     const [currentEvent, setCurrentEvent] = useState(null);
     const [registeredEvents, setRegisteredEvents] = useState([]);
     const [showEventDetails, setShowEventDetails] = useState(null);
+    const [showProfile, setShowProfile] = useState(false);
+    const [user, setUser] = useState({
+        name: "Student User",
+        email: "student@university.edu",
+        bio: "",
+        major: "",
+        graduationYear: "",
+        interests: []
+    });
 
     // Get all unique categories from events
     const categories = [...new Set(events.map(event => event.eventCategory))];
@@ -52,6 +62,17 @@ const StudentDashboard = () => {
                 // Load registered events from localStorage
                 const savedRegistered = JSON.parse(localStorage.getItem('registeredEvents')) || [];
                 setRegisteredEvents(savedRegistered);
+
+                // Load user profile from localStorage
+                const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {
+                    name: "Student User",
+                    email: "student@university.edu",
+                    bio: "",
+                    major: "",
+                    graduationYear: "",
+                    interests: []
+                };
+                setUser(savedProfile);
             } catch (error) {
                 console.error("Error fetching events:", error);
                 toast.error("Failed to load events. Please try again later.");
@@ -62,11 +83,12 @@ const StudentDashboard = () => {
         fetchEvents();
     }, []);
 
-    // Save favorites and registered events to localStorage when they change
+    // Save favorites, registered events, and profile to localStorage when they change
     useEffect(() => {
         localStorage.setItem('eventFavorites', JSON.stringify(favorites));
         localStorage.setItem('registeredEvents', JSON.stringify(registeredEvents));
-    }, [favorites, registeredEvents]);
+        localStorage.setItem('userProfile', JSON.stringify(user));
+    }, [favorites, registeredEvents, user]);
 
     const toggleFavorite = (eventId) => {
         if (favorites.includes(eventId)) {
@@ -93,6 +115,11 @@ const StudentDashboard = () => {
 
     const closeShareModal = () => {
         setShowShareModal(false);
+    };
+
+    const handleUpdateProfile = (updatedProfile) => {
+        setUser(updatedProfile);
+        toast.success("Profile updated successfully!");
     };
 
     // Filter events based on search input and selected filters
@@ -159,6 +186,11 @@ const StudentDashboard = () => {
                         <li><Link to="/student/feedback" onClick={() => setMenuOpen(false)}>Feedback</Link></li>
                         <li><Link to="/student/favorites" onClick={() => setMenuOpen(false)}>My Favorites</Link></li>
                         <li><Link to="/student/registered" onClick={() => setMenuOpen(false)}>My Events</Link></li>
+                        <li>
+                            <Link to="#" onClick={() => { setMenuOpen(false); setShowProfile(true); }}>
+                                <FaUser style={{ marginRight: '8px' }} /> My Profile
+                            </Link>
+                        </li>
                         <li><Link to="/" onClick={() => setMenuOpen(false)}>Logout</Link></li>
                     </ul>
                 </div>
@@ -168,7 +200,7 @@ const StudentDashboard = () => {
             <div className="content">
                 <header className="hero-section">
                     <div className="header-content">
-                        <h1 className="hero-title">Welcome to the Student Events Portal</h1>
+                        <h1 className="hero-title">Welcome back, {user.name.split(' ')[0]}!</h1>
                         <p className="hero-subtitle">
                             Discover and register for exciting events happening on your campus!
                         </p>
@@ -330,6 +362,15 @@ const StudentDashboard = () => {
                 <ShareModal
                     event={currentEvent}
                     onClose={closeShareModal}
+                />
+            )}
+
+            {/* Profile Modal */}
+            {showProfile && (
+                <Profile 
+                    user={user}
+                    onUpdateProfile={handleUpdateProfile}
+                    onClose={() => setShowProfile(false)}
                 />
             )}
 
