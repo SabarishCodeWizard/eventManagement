@@ -2,35 +2,58 @@ import React, { useState, useEffect } from "react";
 import { auth, signInWithGoogle } from "../firebase";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import "../styles/StudentLogin.css"
-
+import "../styles/StudentLogin.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const StudentLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   useEffect(() => {
-      const unsubscribe = auth.onAuthStateChanged(user => {
-          if (user) {
-              navigate("/student-dashboard");
-          }
-      });
-      return unsubscribe;
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigate("/student-dashboard");
+      }
+    });
+    return unsubscribe;
   }, [navigate]);
 
   const handleGoogleSignIn = async () => {
-      try {
-          await signInWithGoogle();
-      } catch (error) {
-          console.error("Error signing in with Google:", error);
-      }
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+      toast.success("Signed in with Google");
+    } catch (error) {
+      toast.error("Google Sign-In Failed");
+      console.error("Error signing in with Google:", error);
+    } finally {
+      setLoading(false);
+    }
   };
-  const handleLogin = (e) => {
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
-    navigate("/student-dashboard");
+    if (!email || !password) {
+      toast.warn("Please fill all fields");
+      return;
+    }
+    setLoading(true);
+    try {
+      // Here you could use Firebase's signInWithEmailAndPassword(auth, email, password)
+      console.log("Email:", email);
+      console.log("Password:", password);
+      toast.success("Login successful");
+      navigate("/student-dashboard");
+    } catch (error) {
+      toast.error("Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,7 +64,6 @@ const StudentLogin = () => {
           Sign in using your Google account to explore upcoming events, register for activities, and stay updated with all the latest happenings.
         </p>
 
-        {/* Email & Password Login Form */}
         <form className="login-form" onSubmit={handleLogin}>
           <input
             type="email"
@@ -51,23 +73,48 @@ const StudentLogin = () => {
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <input
-            type="password"
-            placeholder="Enter your password"
-            className="login-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-          <button type="submit" className="login-btn">Login</button>
+          <div className="password-container">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter your password"
+              className="login-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
+
+          <div className="login-options">
+            <label>
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={() => setRememberMe(!rememberMe)}
+              />
+              Remember Me
+            </label>
+            <a href="/forgot-password" className="forgot-password-link">
+              Forgot Password?
+            </a>
+          </div>
+
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </button>
         </form>
 
         <p className="or-text">OR</p>
 
-        {/* Google Sign-In Button with Logo */}
-        <button className="google-signin-btn" onClick={handleGoogleSignIn}>
+        <button className="google-signin-btn" onClick={handleGoogleSignIn} disabled={loading}>
           <FcGoogle />
-          Sign in with Google
+          {loading ? "Signing in..." : "Sign in with Google"}
         </button>
       </div>
     </div>
