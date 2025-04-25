@@ -7,7 +7,7 @@ import StudentDashboard from "./components/StudentDashboard";
 import EditEvent from "./components/EditEvent";
 import FeedbackPage from "./pages/FeedbackPage";
 import HomePage from "./components/HomePage";
-
+import Favorites from './components/Favorites';
 const App = () => {
   return (
     <Router>
@@ -17,6 +17,7 @@ const App = () => {
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/student-dashboard" element={<StudentDashboard />} />
+        <Route path="/student/favorites" element={<Favorites />} />
         <Route path="/admin/edit/:id" element={<EditEvent />} />
         <Route path="/student/feedback" element={<FeedbackPage />} /> 
       </Routes>
