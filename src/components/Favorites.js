@@ -206,9 +206,7 @@ const Favorites = () => {
                 />
             )}
 
-            <footer className="footer">
-                <p>&copy; {new Date().getFullYear()} Created by Sabarish R &#128519; & NaveenKumar P &#128522;</p>
-            </footer>
+    
         </div>
     );
 };

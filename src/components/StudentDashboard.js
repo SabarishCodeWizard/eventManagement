@@ -327,7 +327,6 @@ const StudentDashboard = () => {
                     </div>
                     <ul>
                         <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
-                        <li><Link to="/student-dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link></li>
                         <li><Link to="/student/feedback" onClick={() => setMenuOpen(false)}>Feedback</Link></li>
                         <li><Link to="/student/favorites" onClick={() => setMenuOpen(false)}>My Favorites ({favorites.length})</Link></li>
                         <li><Link to="/student/registered" onClick={() => setMenuOpen(false)}>My Events ({registeredEvents.length})</Link></li>

@@ -92,14 +92,14 @@ const StudentLogin = () => {
           </div>
 
           <div className="login-options">
-            <label>
+            {/* <label>
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={() => setRememberMe(!rememberMe)}
               />
               Remember Me
-            </label>
+            </label> */}
             <a href="/forgot-password" className="forgot-password-link">
               Forgot Password?
             </a>
