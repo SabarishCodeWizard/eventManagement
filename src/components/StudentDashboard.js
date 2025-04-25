@@ -5,16 +5,18 @@ import "../styles/StudentDashboard.css";
 import {
     FaSearch, FaBars, FaTimes, FaArrowLeft, FaCalendarAlt,
     FaClock, FaMapMarkerAlt, FaFilter, FaStar, FaRegStar,
-    FaUserFriends, FaTicketAlt, FaInfoCircle, FaShareAlt, FaUser
+    FaUserFriends, FaTicketAlt, FaInfoCircle, FaShareAlt, FaUser,
+    FaSort, FaBell, FaRegBell, FaThumbsUp, FaRegThumbsUp, FaComment,
+    FaGraduationCap
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { format, parseISO, isAfter, isToday } from 'date-fns';
+import { format, parseISO, isAfter, isToday, addDays } from 'date-fns';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ShareModal from "./ShareModal";
 import Profile from "./Profile";
 import { auth, getUserProfile, updateUserProfile } from "../firebase";
-
+import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from "react-share";
 
 const StudentDashboard = () => {
     const [events, setEvents] = useState([]);
@@ -22,6 +24,7 @@ const StudentDashboard = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const [filterOpen, setFilterOpen] = useState(false);
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedDepartment, setSelectedDepartment] = useState("All"); // Added department filter
     const [upcomingOnly, setUpcomingOnly] = useState(false);
     const [freeOnly, setFreeOnly] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -31,7 +34,38 @@ const StudentDashboard = () => {
     const [registeredEvents, setRegisteredEvents] = useState([]);
     const [showEventDetails, setShowEventDetails] = useState(null);
     const [showProfile, setShowProfile] = useState(false);
-    // Update the initial user state
+    const [sortOption, setSortOption] = useState("date-asc");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [eventsPerPage] = useState(6);
+    const [reminders, setReminders] = useState([]);
+    const [ratings, setRatings] = useState({});
+    const [comments, setComments] = useState({});
+    const [newComment, setNewComment] = useState("");
+    const [attendedEvents, setAttendedEvents] = useState([]);
+    const [showRecommendations, setShowRecommendations] = useState(true);
+
+    // List of departments - matching the AdminDashboard
+    const departments = [
+        "All Departments",
+        "Computer Science",
+        "Electrical Engineering",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Business Administration",
+        "Mathematics",
+        "Physics",
+        "Chemistry",
+        "Biology",
+        "Psychology",
+        "Economics",
+        "Literature",
+        "Arts",
+        "Medicine",
+        "Law",
+        "Other"
+    ];
+
+    // User state
     const [user, setUser] = useState({
         name: "Guest",
         email: "",
@@ -42,11 +76,10 @@ const StudentDashboard = () => {
         photoURL: null
     });
 
-
     // Get all unique categories from events
     const categories = [...new Set(events.map(event => event.eventCategory))];
 
-    // Update the fetchData function
+    // Load all data on component mount
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -62,11 +95,19 @@ const StudentDashboard = () => {
                 }));
                 setEvents(eventsData);
 
-                // Load favorites and registered events from localStorage
+                // Load user data from localStorage
                 const savedFavorites = JSON.parse(localStorage.getItem('eventFavorites')) || [];
                 setFavorites(savedFavorites);
                 const savedRegistered = JSON.parse(localStorage.getItem('registeredEvents')) || [];
                 setRegisteredEvents(savedRegistered);
+                const savedReminders = JSON.parse(localStorage.getItem('eventReminders')) || [];
+                setReminders(savedReminders);
+                const savedRatings = JSON.parse(localStorage.getItem('eventRatings')) || {};
+                setRatings(savedRatings);
+                const savedComments = JSON.parse(localStorage.getItem('eventComments')) || {};
+                setComments(savedComments);
+                const savedAttended = JSON.parse(localStorage.getItem('attendedEvents')) || [];
+                setAttendedEvents(savedAttended);
 
                 // Load user profile from Firestore
                 const currentUser = auth.currentUser;
@@ -75,7 +116,7 @@ const StudentDashboard = () => {
                     if (userProfile) {
                         setUser(userProfile);
                     } else {
-                        // Create default profile if doesn't exist
+                        // Create default profile
                         const defaultProfile = {
                             name: currentUser.displayName || "Student User",
                             email: currentUser.email,
@@ -88,17 +129,6 @@ const StudentDashboard = () => {
                         await updateUserProfile(currentUser.uid, defaultProfile);
                         setUser(defaultProfile);
                     }
-                } else {
-                    // Handle case when user is not logged in
-                    setUser({
-                        name: "Guest",
-                        email: "",
-                        bio: "",
-                        major: "",
-                        graduationYear: "",
-                        interests: [],
-                        photoURL: null
-                    });
                 }
             } catch (error) {
                 console.error("Error loading data:", error);
@@ -110,13 +140,17 @@ const StudentDashboard = () => {
         fetchData();
     }, []);
 
-    // Remove the localStorage setItem for user profile from the useEffect
+    // Save data to localStorage when it changes
     useEffect(() => {
         localStorage.setItem('eventFavorites', JSON.stringify(favorites));
         localStorage.setItem('registeredEvents', JSON.stringify(registeredEvents));
-    }, [favorites, registeredEvents]);
+        localStorage.setItem('eventReminders', JSON.stringify(reminders));
+        localStorage.setItem('eventRatings', JSON.stringify(ratings));
+        localStorage.setItem('eventComments', JSON.stringify(comments));
+        localStorage.setItem('attendedEvents', JSON.stringify(attendedEvents));
+    }, [favorites, registeredEvents, reminders, ratings, comments, attendedEvents]);
 
-
+    // Event handlers
     const toggleFavorite = (eventId) => {
         if (favorites.includes(eventId)) {
             setFavorites(favorites.filter(id => id !== eventId));
@@ -135,13 +169,49 @@ const StudentDashboard = () => {
         window.open(eventLink, "_blank");
     };
 
+    const toggleReminder = (eventId) => {
+        if (reminders.includes(eventId)) {
+            setReminders(reminders.filter(id => id !== eventId));
+            toast.info("Reminder removed");
+        } else {
+            setReminders([...reminders, eventId]);
+            toast.success("Reminder set! You'll be notified before the event.");
+        }
+    };
+
+    const rateEvent = (eventId, rating) => {
+        setRatings(prev => ({
+            ...prev,
+            [eventId]: rating
+        }));
+        toast.success("Thanks for your rating!");
+    };
+
+    const addComment = (eventId) => {
+        if (newComment.trim()) {
+            setComments(prev => ({
+                ...prev,
+                [eventId]: [...(prev[eventId] || []), {
+                    text: newComment,
+                    author: user.name,
+                    date: new Date().toISOString()
+                }]
+            }));
+            setNewComment("");
+            toast.success("Comment added!");
+        }
+    };
+
+    const markAsAttended = (eventId) => {
+        if (!attendedEvents.includes(eventId)) {
+            setAttendedEvents([...attendedEvents, eventId]);
+            toast.success("Marked as attended!");
+        }
+    };
+
     const openShareModal = (event) => {
         setCurrentEvent(event);
         setShowShareModal(true);
-    };
-
-    const closeShareModal = () => {
-        setShowShareModal(false);
     };
 
     const handleUpdateProfile = async (updatedProfile) => {
@@ -158,28 +228,64 @@ const StudentDashboard = () => {
         }
     };
 
-    // Filter events based on search input and selected filters
+    // Filter and sort events
     const filteredEvents = events.filter(event => {
-        // Search filter
         const matchesSearch =
             event.eventName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             event.eventLocation.toLowerCase().includes(searchQuery.toLowerCase()) ||
             event.eventDesc.toLowerCase().includes(searchQuery.toLowerCase());
 
-        // Category filter
         const matchesCategory =
             selectedCategories.length === 0 ||
             selectedCategories.includes(event.eventCategory);
 
-        // Upcoming filter
+        // Department filter logic
+        const matchesDepartment = 
+            selectedDepartment === "All" || 
+            (event.eventDepartment && event.eventDepartment === selectedDepartment) ||
+            (selectedDepartment === "All Departments" && (!event.eventDepartment || event.eventDepartment === "All Departments"));
+
         const matchesUpcoming = !upcomingOnly || event.isUpcoming;
 
-        // Free events filter
         const matchesFree = !freeOnly || (event.eventFee === "0" || !event.eventFee);
 
-        return matchesSearch && matchesCategory && matchesUpcoming && matchesFree;
+        return matchesSearch && matchesCategory && matchesUpcoming && matchesFree && matchesDepartment;
     });
 
+    const sortedEvents = [...filteredEvents].sort((a, b) => {
+        switch (sortOption) {
+            case "date-asc":
+                return new Date(a.eventDate) - new Date(b.eventDate);
+            case "date-desc":
+                return new Date(b.eventDate) - new Date(a.eventDate);
+            case "name-asc":
+                return a.eventName.localeCompare(b.eventName);
+            case "name-desc":
+                return b.eventName.localeCompare(a.eventName);
+            case "popular":
+                return (b.eventLikes || 0) - (a.eventLikes || 0);
+            default:
+                return 0;
+        }
+    });
+
+    // Get recommended events based on user interests
+    const recommendedEvents = sortedEvents.filter(event => 
+        user.interests?.some(interest => 
+            event.eventCategory.toLowerCase().includes(interest.toLowerCase()) ||
+            event.eventName.toLowerCase().includes(interest.toLowerCase())
+        )
+    ).slice(0, 3);
+
+    // Pagination logic
+    const indexOfLastEvent = currentPage * eventsPerPage;
+    const indexOfFirstEvent = indexOfLastEvent - eventsPerPage;
+    const currentEvents = sortedEvents.slice(indexOfFirstEvent, indexOfLastEvent);
+    const totalPages = Math.ceil(sortedEvents.length / eventsPerPage);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    // Helper functions
     const toggleCategory = (category) => {
         if (selectedCategories.includes(category)) {
             setSelectedCategories(selectedCategories.filter(c => c !== category));
@@ -190,9 +296,12 @@ const StudentDashboard = () => {
 
     const clearFilters = () => {
         setSelectedCategories([]);
+        setSelectedDepartment("All"); // Reset department filter
         setUpcomingOnly(false);
         setFreeOnly(false);
         setSearchQuery("");
+        setSortOption("date-asc");
+        setCurrentPage(1);
         toast.info("Filters cleared");
     };
 
@@ -220,8 +329,8 @@ const StudentDashboard = () => {
                         <li><Link to="/" onClick={() => setMenuOpen(false)}>Home</Link></li>
                         <li><Link to="/student-dashboard" onClick={() => setMenuOpen(false)}>Dashboard</Link></li>
                         <li><Link to="/student/feedback" onClick={() => setMenuOpen(false)}>Feedback</Link></li>
-                        <li><Link to="/student/favorites" onClick={() => setMenuOpen(false)}>My Favorites</Link></li>
-                        <li><Link to="/student/registered" onClick={() => setMenuOpen(false)}>My Events</Link></li>
+                        <li><Link to="/student/favorites" onClick={() => setMenuOpen(false)}>My Favorites ({favorites.length})</Link></li>
+                        <li><Link to="/student/registered" onClick={() => setMenuOpen(false)}>My Events ({registeredEvents.length})</Link></li>
                         <li>
                             <Link to="#" onClick={() => { setMenuOpen(false); setShowProfile(true); }}>
                                 <FaUser style={{ marginRight: '8px' }} /> My Profile
@@ -232,7 +341,7 @@ const StudentDashboard = () => {
                 </div>
             </nav>
 
-            {/* Hero Section */}
+            {/* Main Content */}
             <div className="content">
                 <header className="hero-section">
                     <div className="header-content">
@@ -267,6 +376,20 @@ const StudentDashboard = () => {
                     {filterOpen && (
                         <div className="filter-panel">
                             <div className="filter-section">
+                                <h4>Sort By</h4>
+                                <select
+                                    className="sort-select"
+                                    value={sortOption}
+                                    onChange={(e) => setSortOption(e.target.value)}
+                                >
+                                    <option value="date-asc">Date (Earliest First)</option>
+                                    <option value="date-desc">Date (Latest First)</option>
+                                    <option value="name-asc">Name (A-Z)</option>
+                                    <option value="name-desc">Name (Z-A)</option>
+                                    <option value="popular">Most Popular</option>
+                                </select>
+                            </div>
+                            <div className="filter-section">
                                 <h4>Categories</h4>
                                 <div className="category-filters">
                                     {categories.map(category => (
@@ -279,6 +402,20 @@ const StudentDashboard = () => {
                                         </button>
                                     ))}
                                 </div>
+                            </div>
+                            {/* Department Filter - New Section */}
+                            <div className="filter-section">
+                                <h4>Department</h4>
+                                <select 
+                                    className="department-select"
+                                    value={selectedDepartment}
+                                    onChange={(e) => setSelectedDepartment(e.target.value)}
+                                >
+                                    <option value="All">All Departments</option>
+                                    {departments.slice(1).map(dept => (
+                                        <option key={dept} value={dept}>{dept}</option>
+                                    ))}
+                                </select>
                             </div>
                             <div className="filter-section">
                                 <label className="checkbox-label">
@@ -307,82 +444,220 @@ const StudentDashboard = () => {
                     )}
                 </header>
 
+                {/* Recommended Events Section */}
+                {showRecommendations && recommendedEvents.length > 0 && (
+                    <div className="recommended-section">
+                        <h2 className="section-title">
+                            Recommended For You
+                            <button 
+                                className="hide-recommendations" 
+                                onClick={() => setShowRecommendations(false)}
+                            >
+                                Hide
+                            </button>
+                        </h2>
+                        <div className="recommended-grid">
+                            {recommendedEvents.map(event => (
+                                <div key={`rec-${event.id}`} className="recommended-card">
+                                    <h3>{event.eventName}</h3>
+                                    <p><FaCalendarAlt /> {event.formattedDate}</p>
+                                    <p><FaMapMarkerAlt /> {event.eventLocation}</p>
+                                    <button 
+                                        className="view-details-btn"
+                                        onClick={() => {
+                                            document.getElementById(event.id)?.scrollIntoView({ behavior: 'smooth' });
+                                        }}
+                                    >
+                                        View Details
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {/* Events Section */}
                 <div className="events-section">
+                    <h2 className="section-title">
+                        All Events ({filteredEvents.length})
+                        {selectedDepartment !== "All" && (
+                            <span className="filter-badge">
+                                {selectedDepartment}
+                            </span>
+                        )}
+                    </h2>
+                    
                     {loading ? (
                         <div className="loading-spinner">
                             <div className="spinner"></div>
                             <p>Loading events...</p>
                         </div>
-                    ) : filteredEvents.length > 0 ? (
-                        <div className="events-grid">
-                            {filteredEvents.map(event => (
-                                <div key={event.id} className={`event-card ${!event.isUpcoming ? 'past-event' : ''}`}>
-                                    <div className="card-header">
-                                        <h3 className="event-title">{event.eventName}</h3>
-                                        <div className="event-actions">
+                    ) : currentEvents.length > 0 ? (
+                        <>
+                            <div className="events-grid">
+                                {currentEvents.map(event => (
+                                    <div 
+                                        key={event.id} 
+                                        id={event.id}
+                                        className={`event-card ${!event.isUpcoming ? 'past-event' : ''}`}
+                                    >
+                                        <div className="card-header">
+                                            <h3 className="event-title">{event.eventName}</h3>
+                                            <div className="event-actions">
+                                                <button
+                                                    className={`favorite-btn ${favorites.includes(event.id) ? 'active' : ''}`}
+                                                    onClick={() => toggleFavorite(event.id)}
+                                                >
+                                                    {favorites.includes(event.id) ? <FaStar /> : <FaRegStar />}
+                                                </button>
+                                                <button
+                                                    className={`reminder-btn ${reminders.includes(event.id) ? 'active' : ''}`}
+                                                    onClick={() => toggleReminder(event.id)}
+                                                >
+                                                    {reminders.includes(event.id) ? <FaBell /> : <FaRegBell />}
+                                                </button>
+                                                <button
+                                                    className="share-btn"
+                                                    onClick={() => openShareModal(event)}
+                                                >
+                                                    <FaShareAlt />
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className="event-tags">
+                                            <span className="event-category">{event.eventCategory}</span>
+                                            {event.eventDepartment && event.eventDepartment !== "All Departments" && (
+                                                <span className="event-department">
+                                                    <FaGraduationCap /> {event.eventDepartment}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="event-details">
+                                            <p><FaCalendarAlt /> {event.formattedDate}</p>
+                                            <p><FaClock /> {event.eventTime}</p>
+                                            <p><FaMapMarkerAlt /> {event.eventLocation || "Not Specified"}</p>
+                                            {event.eventCapacity && (
+                                                <p><FaUserFriends /> {event.eventCapacity} spots available</p>
+                                            )}
+                                            {event.eventFee ? (
+                                                <p><FaTicketAlt /> ${event.eventFee}</p>
+                                            ) : (
+                                                <p><FaTicketAlt /> Free</p>
+                                            )}
+                                        </div>
+                                        <div className="event-description-container">
+                                            <p className="event-description">
+                                                {showEventDetails === event.id ?
+                                                    event.eventDesc :
+                                                    `${event.eventDesc.substring(0, 100)}...`}
+                                            </p>
+                                            {event.eventDesc.length > 100 && (
+                                                <button
+                                                    className="read-more-btn"
+                                                    onClick={() => toggleEventDetails(event.id)}
+                                                >
+                                                    {showEventDetails === event.id ? 'Show less' : 'Read more'}
+                                                </button>
+                                            )}
+                                        </div>
+                                        
+                                        {/* Rating Section */}
+                                        {!event.isUpcoming && (
+                                            <div className="rating-section">
+                                                <p>Rate this event:</p>
+                                                <div className="rating-stars">
+                                                    {[1, 2, 3, 4, 5].map(star => (
+                                                        <FaStar 
+                                                            key={star}
+                                                            className={`star ${ratings[event.id] >= star ? 'active' : ''}`}
+                                                            onClick={() => rateEvent(event.id, star)}
+                                                        />
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        {/* Comments Section */}
+                                        {showEventDetails === event.id && (
+                                            <div className="comments-section">
+                                                <h4>Comments ({comments[event.id]?.length || 0})</h4>
+                                                {comments[event.id]?.map((comment, index) => (
+                                                    <div key={index} className="comment">
+                                                        <strong>{comment.author}</strong>
+                                                        <p>{comment.text}</p>
+                                                        <small>{format(new Date(comment.date), 'MMM dd, yyyy')}</small>
+                                                    </div>
+                                                ))}
+                                                <div className="add-comment">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Add a comment..."
+                                                        value={newComment}
+                                                        onChange={(e) => setNewComment(e.target.value)}
+                                                    />
+                                                    <button onClick={() => addComment(event.id)}>Post</button>
+                                                </div>
+                                            </div>
+                                        )}
+                                        
+                                        <div className="card-footer">
                                             <button
-                                                className={`favorite-btn ${favorites.includes(event.id) ? 'active' : ''}`}
-                                                onClick={() => toggleFavorite(event.id)}
-                                                aria-label={favorites.includes(event.id) ? "Remove from favorites" : "Add to favorites"}
+                                                className={`register-btn ${registeredEvents.includes(event.id) ? 'registered' : ''}`}
+                                                onClick={() => registerForEvent(event.id, event.eventLink)}
+                                                disabled={!event.isUpcoming}
                                             >
-                                                {favorites.includes(event.id) ? <FaStar /> : <FaRegStar />}
+                                                {registeredEvents.includes(event.id) ?
+                                                    'Registered' :
+                                                    'Register Now'}
                                             </button>
-                                            <button
-                                                className="share-btn"
-                                                onClick={() => openShareModal(event)}
-                                                aria-label="Share event"
-                                            >
-                                                <FaShareAlt />
-                                            </button>
+                                            
+                                            {!event.isUpcoming && (
+                                                <>
+                                                    <span className="event-ended-badge">Event Ended</span>
+                                                    {registeredEvents.includes(event.id) && !attendedEvents.includes(event.id) && (
+                                                        <button 
+                                                            className="attended-btn"
+                                                            onClick={() => markAsAttended(event.id)}
+                                                        >
+                                                            I Attended
+                                                        </button>
+                                                    )}
+                                                </>
+                                            )}
                                         </div>
                                     </div>
-                                    <p className="event-category">{event.eventCategory}</p>
-                                    <div className="event-details">
-                                        <p><FaCalendarAlt /> {event.formattedDate}</p>
-                                        <p><FaClock /> {event.eventTime}</p>
-                                        <p><FaMapMarkerAlt /> {event.eventLocation || "Not Specified"}</p>
-                                        {event.eventCapacity && (
-                                            <p><FaUserFriends /> {event.eventCapacity} spots available</p>
-                                        )}
-                                        {event.eventFee ? (
-                                            <p><FaTicketAlt /> ${event.eventFee}</p>
-                                        ) : (
-                                            <p><FaTicketAlt /> Free</p>
-                                        )}
-                                    </div>
-                                    <div className="event-description-container">
-                                        <p className="event-description">
-                                            {showEventDetails === event.id ?
-                                                event.eventDesc :
-                                                `${event.eventDesc.substring(0, 100)}...`}
-                                        </p>
-                                        {event.eventDesc.length > 100 && (
-                                            <button
-                                                className="read-more-btn"
-                                                onClick={() => toggleEventDetails(event.id)}
-                                            >
-                                                {showEventDetails === event.id ? 'Show less' : 'Read more'}
-                                            </button>
-                                        )}
-                                    </div>
-                                    <div className="card-footer">
+                                ))}
+                            </div>
+                            
+                            {/* Pagination */}
+                            {totalPages > 1 && (
+                                <div className="pagination">
+                                    <button 
+                                        onClick={() => paginate(Math.max(1, currentPage - 1))}
+                                        disabled={currentPage === 1}
+                                    >
+                                        Previous
+                                    </button>
+                                    
+                                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                                         <button
-                                            className={`register-btn ${registeredEvents.includes(event.id) ? 'registered' : ''}`}
-                                            onClick={() => registerForEvent(event.id, event.eventLink)}
-                                            disabled={!event.isUpcoming}
+                                            key={number}
+                                            onClick={() => paginate(number)}
+                                            className={currentPage === number ? 'active' : ''}
                                         >
-                                            {registeredEvents.includes(event.id) ?
-                                                'Registered' :
-                                                'Register Now'}
+                                            {number}
                                         </button>
-                                        {!event.isUpcoming && (
-                                            <span className="event-ended-badge">Event Ended</span>
-                                        )}
-                                    </div>
+                                    ))}
+                                    
+                                    <button 
+                                        onClick={() => paginate(Math.min(totalPages, currentPage + 1))}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        Next
+                                    </button>
                                 </div>
-                            ))}
-                        </div>
+                            )}
+                        </>
                     ) : (
                         <div className="no-events">
                             <FaInfoCircle className="no-events-icon" />
@@ -399,7 +674,7 @@ const StudentDashboard = () => {
             {showShareModal && (
                 <ShareModal
                     event={currentEvent}
-                    onClose={closeShareModal}
+                    onClose={() => setShowShareModal(false)}
                 />
             )}
 

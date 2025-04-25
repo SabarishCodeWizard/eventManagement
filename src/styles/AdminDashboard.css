@@ -108,12 +108,6 @@
   }
 }
 
-@media (min-width: 1200px) {
-  .admin-content {
-    grid-template-columns: 1fr 2fr;
-  }
-}
-
 /* Card styles with 3D effect */
 .form-card,
 .event-list-card {
@@ -333,6 +327,11 @@ select {
   margin-bottom: 25px;
 }
 
+.event-filters {
+  display: flex;
+  gap: 10px;
+}
+
 .event-filters select {
   padding: 10px 15px;
   min-width: 220px;
@@ -470,6 +469,25 @@ select {
 .category-badge.other {
   background: linear-gradient(135deg, #efebe9 0%, #d7ccc8 100%);
   color: #5d4037;
+}
+
+/* Department badge */
+.department-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ed 100%);
+  color: #34495e;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  transform: translateZ(0);
+}
+
+.department-badge:hover {
+  transform: translateY(-2px) translateZ(10px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* 3D Action buttons */
@@ -657,6 +675,10 @@ button:focus, .edit-btn:focus, .delete-btn:focus {
   .form-card h3,
   .event-list-card h3 {
     font-size: 1.4rem;
+  }
+  
+  .event-filters {
+    flex-direction: column;
   }
 }
 

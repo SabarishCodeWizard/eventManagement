@@ -15,14 +15,37 @@ const AdminDashboard = () => {
     eventDesc: "",
     eventLink: "",
     eventCategory: "Workshop",
-    eventLocation: ""
+    eventLocation: "",
+    eventDepartment: "All Departments" // Added department field
   });
   const [events, setEvents] = useState([]);
   const [editingEvent, setEditingEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [filterCategory, setFilterCategory] = useState("All");
+  const [filterDepartment, setFilterDepartment] = useState("All"); // Added department filter
   const navigate = useNavigate();
+
+  // List of departments
+  const departments = [
+    "All Departments",
+    "Computer Science",
+    "Electrical Engineering",
+    "Mechanical Engineering",
+    "Civil Engineering",
+    "Business Administration",
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Psychology",
+    "Economics",
+    "Literature",
+    "Arts",
+    "Medicine",
+    "Law",
+    "Other"
+  ];
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -47,9 +70,9 @@ const AdminDashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { eventName, eventDate, eventTime, eventDesc, eventLink, eventLocation } = formData;
+    const { eventName, eventDate, eventTime, eventDesc, eventLink, eventLocation, eventDepartment } = formData;
     
-    if (!eventName || !eventDate || !eventTime || !eventDesc || !eventLink || !eventLocation) {
+    if (!eventName || !eventDate || !eventTime || !eventDesc || !eventLink || !eventLocation || !eventDepartment) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -76,7 +99,8 @@ const AdminDashboard = () => {
         eventDesc: "",
         eventLink: "",
         eventCategory: "Workshop",
-        eventLocation: ""
+        eventLocation: "",
+        eventDepartment: "All Departments"
       });
     } catch (error) {
       console.error("Error saving event:", error);
@@ -118,7 +142,8 @@ const AdminDashboard = () => {
       eventDesc: event.eventDesc,
       eventLink: event.eventLink,
       eventCategory: event.eventCategory,
-      eventLocation: event.eventLocation
+      eventLocation: event.eventLocation,
+      eventDepartment: event.eventDepartment || "All Departments" // Handle older events without department
     });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -127,7 +152,10 @@ const AdminDashboard = () => {
     const matchesSearch = event.eventName.toLowerCase().includes(searchTerm.toLowerCase()) || 
                          event.eventDesc.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === "All" || event.eventCategory === filterCategory;
-    return matchesSearch && matchesCategory;
+    const matchesDepartment = filterDepartment === "All" || 
+                             (event.eventDepartment && event.eventDepartment === filterDepartment) || 
+                             (!event.eventDepartment && filterDepartment === "All Departments");
+    return matchesSearch && matchesCategory && matchesDepartment;
   });
 
   const formatDate = (dateString) => {
@@ -181,7 +209,6 @@ const AdminDashboard = () => {
                   <div className="form-group">
                     <label>Date *</label>
                     <div className="input-with-icon">
-                      {/* <FiCalendar /> */}
                       <input 
                         type="date" 
                         name="eventDate"
@@ -194,7 +221,6 @@ const AdminDashboard = () => {
                   <div className="form-group">
                     <label>Time *</label>
                     <div className="input-with-icon">
-                      {/* <FiClock /> */}
                       <input 
                         type="time" 
                         name="eventTime"
@@ -209,7 +235,6 @@ const AdminDashboard = () => {
                 <div className="form-group">
                   <label>Location *</label>
                   <div className="input-with-icon">
-                    {/* <FiMapPin /> */}
                     <input 
                       type="text" 
                       name="eventLocation"
@@ -221,21 +246,37 @@ const AdminDashboard = () => {
                   </div>
                 </div>
 
-                <div className="form-group">
-                  <label>Category *</label>
-                  <select 
-                    name="eventCategory"
-                    value={formData.eventCategory}
-                    onChange={handleInputChange}
-                    required
-                  >
-                    <option value="Workshop">Workshop</option>
-                    <option value="Seminar">Seminar</option>
-                    <option value="Conference">Conference</option>
-                    <option value="Sports">Sports</option>
-                    <option value="Social">Social</option>
-                    <option value="Other">Other</option>
-                  </select>
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Category *</label>
+                    <select 
+                      name="eventCategory"
+                      value={formData.eventCategory}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      <option value="Workshop">Workshop</option>
+                      <option value="Seminar">Seminar</option>
+                      <option value="Conference">Conference</option>
+                      <option value="Sports">Sports</option>
+                      <option value="Social">Social</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  
+                  <div className="form-group">
+                    <label>Department *</label>
+                    <select 
+                      name="eventDepartment"
+                      value={formData.eventDepartment}
+                      onChange={handleInputChange}
+                      required
+                    >
+                      {departments.map(dept => (
+                        <option key={dept} value={dept}>{dept}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
                 <div className="form-group">
@@ -252,7 +293,6 @@ const AdminDashboard = () => {
                 <div className="form-group">
                   <label>Registration Link *</label>
                   <div className="input-with-icon">
-                    {/* <FiLink /> */}
                     <input 
                       type="url" 
                       name="eventLink"
@@ -278,7 +318,8 @@ const AdminDashboard = () => {
                           eventDesc: "",
                           eventLink: "",
                           eventCategory: "Workshop",
-                          eventLocation: ""
+                          eventLocation: "",
+                          eventDepartment: "All Departments"
                         });
                       }}
                     >
@@ -309,6 +350,16 @@ const AdminDashboard = () => {
                     <option value="Social">Social</option>
                     <option value="Other">Other</option>
                   </select>
+                  
+                  <select 
+                    value={filterDepartment}
+                    onChange={(e) => setFilterDepartment(e.target.value)}
+                  >
+                    <option value="All">All Departments</option>
+                    {departments.slice(1).map(dept => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
@@ -323,6 +374,7 @@ const AdminDashboard = () => {
                       <tr>
                         <th>Name</th>
                         <th>Category</th>
+                        <th>Department</th>
                         <th>Date & Time</th>
                         <th>Location</th>
                         <th>Actions</th>
@@ -338,6 +390,11 @@ const AdminDashboard = () => {
                           <td>
                             <span className={`category-badge ${event.eventCategory.toLowerCase()}`}>
                               {event.eventCategory}
+                            </span>
+                          </td>
+                          <td>
+                            <span className="department-badge">
+                              {event.eventDepartment || "All Departments"}
                             </span>
                           </td>
                           <td>
