@@ -432,7 +432,7 @@ const AdminDashboard = () => {
       <footer className="footer">
         <p className="footer-p">
           &copy; {new Date().getFullYear()} Event Management System | 
-          Created by Sabarish R &#128519; & NaveenKumar P &#128522;
+          Created by  Iniyaa &#128519; &  Shivaani &#128522;
         </p>
       </footer>
     </div>

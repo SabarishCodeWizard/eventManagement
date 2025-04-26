@@ -687,7 +687,7 @@ const StudentDashboard = () => {
             )}
 
             <footer className="footer">
-                <p className="footer-p">&copy; {new Date().getFullYear()} Created by Sabarish R &#128519; & NaveenKumar P &#128522;</p>
+                <p className="footer-p">&copy; {new Date().getFullYear()}  Created by  Iniyaa &#128519; &  Shivaani &#128522;</p>
             </footer>
         </div>
     );
